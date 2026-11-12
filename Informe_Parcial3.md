@@ -202,7 +202,7 @@ Zona nacional es el `else` implícito; día 6 queda excluido por el defecto `d>6
 
 ## 5. Automatización, defectos y métricas
 
-La regresión está en `test_envios.py`: 25 escenarios más los siete días válidos, **32 pruebas aprobadas**. La auditoría del legado está en `test_legado_v1.py`: **nueve fallos esperados**, cada uno asociado a un defecto en `envios_legado_v1.py`, copia exacta de v1.0.0. `pytest-cov` informa para `envios.py`: 64 sentencias, 18 ramas; cobertura total del 100%. Comandos: `python -m pytest -q test_legado_v1.py` y `python -m pytest -q --cov=envios --cov-branch --cov-report=term-missing test_envios.py`. No se adjunta una captura gráfica; los resultados se verifican ejecutando estos comandos.
+La regresión está en `test_envios.py`: 25 escenarios más los siete días válidos, **32 pruebas aprobadas**. La auditoría del legado está en `test_legado_v1.py`: **nueve fallos reproducibles**, cada uno asociado a un defecto en `envios_legado_v1.py`, copia exacta de v1.0.0. `pytest-cov` informa para `envios.py`: 62 sentencias y 18 ramas; cobertura total del 100%. Comandos: `python -m pytest --runxfail -q --tb=no test_legado_v1.py` para mostrar los incumplimientos y `python -m pytest -q --cov=envios --cov-branch --cov-report=term-missing test_envios.py` para la regresión corregida. Las capturas y salidas de consola están en `evidencias/`.
 
 **Registro de defectos del original (líneas referidas al extracto del PDF, página 3):**
 
@@ -221,7 +221,7 @@ La regresión está en `test_envios.py`: 25 escenarios más los siete días vál
 
 Severidad expresa impacto; prioridad expresa urgencia. La copia exacta del legado está versionada en `v1.0.0`; contiene 37 líneas de código no vacías, sin contar comentarios. Densidad registrada: 8/37×100 = **21,6 defectos por 100 líneas**. Severidad: 3 altas, 4 medias y 1 baja. Prioridad: 5 altas, 2 medias y 1 baja.
 
-**Métricas observadas:** regresión posterior: 32/32 = 100% aprobadas. Cobertura del módulo refactorizado: 100% de sentencias y ramas (64 sentencias, 18 ramas). El código legado se conserva en la etiqueta v1.0.0 y en `envios_legado_v1.py`; las pruebas de contrato reproducen sus ocho defectos reportados.
+**Métricas observadas:** regresión posterior: 32/32 = 100% aprobadas. Cobertura del módulo refactorizado: 100% de sentencias y ramas (62 sentencias, 18 ramas). El código legado se conserva en la etiqueta v1.0.0 y en `envios_legado_v1.py`; las nueve pruebas negativas reproducen ocho defectos reportados.
 
 ---
 
@@ -274,7 +274,7 @@ La implementación refactorizada y corregida está en `envios.py`: validaciones 
 |---|---:|---:|---|
 | CC de `calc` | 13 | 4 | decisiones del cuerpo: original 12; nuevo 3 + 1 |
 | Líneas físicas, incluyendo blancos | 40 | 100 | copia `v1.0.0` / `envios.py` |
-| Cobertura | no medida en v1 | 100% sentencias y ramas | pytest-cov; 64 stmts, 18 ramas |
+| Cobertura | no medida en v1 | 100% sentencias y ramas | pytest-cov; 62 sentencias, 18 ramas |
 
 La CC local de `calc` baja porque se separaron validación, tarifa y descuentos; la CC del módulo completo no equivale a la de una sola función. Las líneas aumentan por tipos, estrategias y separación de responsabilidades. El conteo inicial se hizo sobre la copia del código extraída del PDF.
 
@@ -345,4 +345,4 @@ def test_empate_de_50_redondea_hacia_arriba():
 
 **Secuencia oral y de trabajo:** minuto 0–3, explicar R4/R8 y calcular 9.000×1,15=10.350; minuto 3–6, ejecutar `test_legado_v1.py` y observar PLEG-07 como fallo esperado (el legado trunca a $10.300); minuto 6–11, cambiar al redondeo de mitades hacia arriba; minuto 11–15, ejecutar `test_envios.py`; minuto 15–18, revisar los cambios y el orden del piso y el redondeo; minuto 18–20, registrar la corrección y la etiqueta correspondiente. La rama DEF-06 contiene este arreglo.
 
-**Evidencia:** `envios_legado_v1.py` es la copia ejecutable de v1.0.0; `test_legado_v1.py` reproduce los defectos y `test_envios.py` demuestra la regresión aprobada. No se adjunta una captura gráfica del terminal; los comandos reproducibles están en la Parte 5.
+**Evidencia:** `envios_legado_v1.py` es la copia ejecutable de v1.0.0; `test_legado_v1.py` reproduce los defectos y `test_envios.py` demuestra la regresión aprobada. Las capturas y su procedimiento reproducible están en `evidencias/README.md`.

@@ -1,0 +1,12 @@
+Comando: python -m pytest --runxfail -q --tb=no test_legado_v1.py
+Resultado: 9 pruebas fallidas de 9; código de salida 1, esperado en esta auditoría.
+Las fallas reproducen defectos presentes en la versión heredada:
+PLEG-01 — No rechaza un peso superior al máximo personal.
+PLEG-02 — No rechaza una zona desconocida.
+PLEG-03 — No rechaza un día fuera del intervalo válido.
+PLEG-04 — Omite el recargo de sábado.
+PLEG-05 — El descuento reduce también el recargo de fin de semana.
+PLEG-06 — Acepta un cupón desconocido.
+PLEG-07 — Trunca el empate de redondeo en vez de subirlo.
+PLEG-08 — Acepta un tipo de cliente desconocido.
+PLEG-09 — Conserva el parámetro de impresión flag.

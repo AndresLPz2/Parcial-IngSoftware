@@ -2,6 +2,11 @@
 
 Formato de registro de cambios; versiones según el esquema semántico.
 
+## [2.1.1] - 2026-11-11
+### Documentación
+- Se agregaron capturas y resúmenes en español de las pruebas fallidas del legado y la regresión aprobada.
+- Se actualizó la medición de cobertura con la ejecución actual: 62 sentencias, 18 ramas y 100%.
+
 ## [2.1.0] - 2026-11-11
 ### Agregado
 - Cliente empresarial con 12% de descuento.
