@@ -11,6 +11,7 @@ RECARGO_NACIONAL = 0.45
 DESC_VIP = 0.10
 DESC_FRECUENTE = 0.05
 DESC_CUPON = 0.10
+DESC_EMPRESARIAL = 0.12
 RECARGO_FINDE = 2000.0
 PISO = 5000.0
 TARIFA_TRAMO_1 = 6000.0
@@ -30,17 +31,32 @@ class StandardZone:
         return amount * (1 + self.rate)
 
 
+@dataclass(frozen=True)
+class EnterpriseZone:
+    rate: float
+
+    def apply(self, amount: float, weight: float) -> float:
+        return amount if weight > L2 else amount * (1 + self.rate)
+
+
 ZONES = {
     "urbana": StandardZone(0.0),
     "rural": StandardZone(RECARGO_RURAL),
     "nacional": StandardZone(RECARGO_NACIONAL),
 }
+ENTERPRISE_ZONES = {
+    "urbana": EnterpriseZone(0.0),
+    "rural": EnterpriseZone(RECARGO_RURAL),
+    "nacional": EnterpriseZone(RECARGO_NACIONAL),
+}
+
+
 def validate(weight: float, zone: str, customer: str, day: int, coupon: str | None) -> None:
     if not isinstance(weight, (int, float)) or isinstance(weight, bool) or not 0 < weight <= PMAX:
         raise ValueError("peso inválido")
     if zone not in ZONES:
         raise ValueError("zona inválida")
-    if customer not in {"normal", "frecuente", "vip"}:
+    if customer not in {"normal", "frecuente", "vip", "empresarial"}:
         raise ValueError("cliente inválido")
     if not isinstance(day, int) or isinstance(day, bool) or not 1 <= day <= 7:
         raise ValueError("día inválido")
@@ -57,7 +73,7 @@ def base_tariff(weight: float) -> float:
 
 
 def apply_customer_discount(amount: float, customer: str) -> float:
-    rates = {"normal": 0.0, "frecuente": DESC_FRECUENTE, "vip": DESC_VIP}
+    rates = {"normal": 0.0, "frecuente": DESC_FRECUENTE, "vip": DESC_VIP, "empresarial": DESC_EMPRESARIAL}
     return amount * (1 - rates[customer])
 
 
@@ -70,7 +86,8 @@ def calc(weight: float, zone: str, customer: str, day: int, coupon: str | None =
     validate(weight, zone, customer, day, coupon)
     amount = base_tariff(weight)
 
-    amount = ZONES[zone].apply(amount, weight)
+    strategies = ENTERPRISE_ZONES if customer == "empresarial" else ZONES
+    amount = strategies[zone].apply(amount, weight)
 
     # E=5, impar: el recargo de fin de semana se suma después de descuentos.
     amount = apply_customer_discount(amount, customer)
