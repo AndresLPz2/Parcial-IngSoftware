@@ -4,7 +4,7 @@
 **Estudiante:** código 0182310057 · **Grupo:** B1 · **Periodo:** 2026-2  
 **Fecha del enunciado:** 11 de noviembre de 2026
 
-> **Interpretación del código.** El PDF ordena tomar los últimos seis dígitos y asignarlos de izquierda a derecha a A–F. En `0182310057`, los últimos seis son `310057`, de modo que A=3, B=1, C=0, D=0, E=5, F=7. La cadena `182310057` que aparece en la solicitud tiene nueve cifras; no es posible asignarla directamente a seis variables. Todo este informe usa la regla del PDF; si el docente quería otra selección de dígitos, hay que recalcular el trabajo.
+> **Interpretación del código.** El PDF ordena tomar los últimos seis dígitos y asignarlos de izquierda a derecha a A–F. En `0182310057`, los últimos seis son `310057`, de modo que A=3, B=1, C=0, D=0, E=5, F=7. La cadena `182310057` que aparece en la solicitud tiene nueve cifras; no es posible asignarla directamente a seis variables. Todo este informe usa la regla del PDF. La copia del legado conserva fielmente los nombres originales; la implementación nueva, sus comentarios y las pruebas están en español.
 
 | Parámetro | Cálculo | Valor |
 |---|---:|---:|
@@ -194,15 +194,15 @@ Zona nacional es el `else` implícito; día 6 queda excluido por el defecto `d>6
 
 **Complejidad ciclomática por tres métodos:** (i) `E−N+2P`: al reducir cadenas de asignación a aristas etiquetadas, N=14 (entrada, 12 predicados, salida), E=25 (24 salidas de predicados y una entrada), P=1; V=25−14+2=13. (ii) predicados + 1: 12+1=13. (iii) regiones: 13 regiones, por tanto 13. Las condiciones compuestas del peso se consideran una decisión funcional, no cobertura MC/DC.
 
-**Conjunto de caminos básicos (13) y representantes:** B1 peso inválido (CP19); B2 tramo 1 urbana (CP01/02); B3 tramo 2 (CP04); B4 sobre L2 proporcional (CP05); B5 rural (CP07); B6 nacional/else (CP08); B7 fin de semana (CP13); B8 frecuente (CP09); B9 VIP (CP10); B10 cupón válido (CP11); B11 cupón desconocido (TLEG-06); B12 piso (CP12); B13 flag (TLEG-09). Los caminos incluyen combinaciones independientes de estas decisiones; el representante es el caso que fuerza esa bifurcación. El cambio empresarial se cubre aparte con CP16–CP18.
+**Conjunto de caminos básicos (13) y representantes:** B1 peso inválido (CP19); B2 tramo 1 urbana (CP01/02); B3 tramo 2 (CP04); B4 sobre L2 proporcional (CP05); B5 rural (CP07); B6 nacional/alternativa final (CP08); B7 fin de semana (CP13); B8 frecuente (CP09); B9 VIP (CP10); B10 cupón válido (CP11); B11 cupón desconocido (PLEG-06); B12 piso (CP12); B13 `flag` activo (PLEG-09). Los caminos incluyen combinaciones independientes de estas decisiones; el representante es el caso que fuerza esa bifurcación. El cambio empresarial se cubre aparte con CP16–CP18.
 
-**Cobertura:** TLEG-01–TLEG-09 son pruebas de contrato marcadas `xfail` porque se ejecutan contra el snapshot v1.0.0 y reproducen fallos conocidos; al correrlas, pytest informa 9 xfailed. CP01–CP25 y los siete días se ejecutan en la implementación reparada. La cobertura de ramas medida se informa para el código reparado, no se extrapola al snapshot inicial.
+**Cobertura:** PLEG-01–PLEG-09 son pruebas de contrato marcadas como fallos esperados porque se ejecutan contra la copia v1.0.0 y reproducen defectos conocidos; pytest informa nueve fallos esperados. CP01–CP25 y los siete días se ejecutan en la implementación reparada. La cobertura de ramas medida corresponde al código reparado, no a la copia inicial.
 
 ---
 
 ## 5. Automatización, defectos y métricas
 
-La suite reproducible está en `test_envios.py`: 25 escenarios más los siete días válidos, **32 passed**. La auditoría del legado está en `test_legacy_v1.py`: **9 xfailed**, cada uno asociado a un defecto en `envios_legacy_v1.py`, copia exacta de v1.0.0. `pytest-cov --cov-branch` informa para `envios.py`: 64 sentencias, 18 ramas; 100% combinado. Comandos: `python -m pytest -q test_legacy_v1.py` y `python -m pytest -q --cov=envios --cov-branch --cov-report=term-missing test_envios.py`. No se adjunta captura gráfica; estos resultados se verifican ejecutando los comandos.
+La regresión está en `test_envios.py`: 25 escenarios más los siete días válidos, **32 pruebas aprobadas**. La auditoría del legado está en `test_legado_v1.py`: **nueve fallos esperados**, cada uno asociado a un defecto en `envios_legado_v1.py`, copia exacta de v1.0.0. `pytest-cov` informa para `envios.py`: 64 sentencias, 18 ramas; cobertura total del 100%. Comandos: `python -m pytest -q test_legado_v1.py` y `python -m pytest -q --cov=envios --cov-branch --cov-report=term-missing test_envios.py`. No se adjunta una captura gráfica; los resultados se verifican ejecutando estos comandos.
 
 **Registro de defectos del original (líneas referidas al extracto del PDF, página 3):**
 
@@ -215,109 +215,109 @@ La suite reproducible está en `test_envios.py`: 25 escenarios más los siete d�
 | DEF-05 | Cupón desconocido se ignora (R7, línea 28) | `cup='OTRO'`; F impar exige error → permanece igual | Media/Media |
 | DEF-06 | Redondeo trunca (R8, línea 34) | total 10.350; a $100 más cercano $10.400 → `int(10350/100)*100=$10.300` | Media/Alta: subcobra y rompe regla explícita |
 | DEF-07 | Cliente sin lista blanca (R6, línea 23–29) | `c='ocasional'`; error → no aplica descuento y devuelve precio | Alta/Alta |
-| DEF-08 | `flag` imprime y es parte de API (líneas 31–32) | Parte 6 ordena quitarlo; con `flag=True` escribe stdout | Baja/Media: efecto lateral e interfaz heredada |
+| DEF-08 | `flag` imprime y forma parte de la interfaz (líneas 31–32) | Parte 6 ordena quitarlo; con `flag=True` escribe en la salida estándar | Baja/Media: efecto lateral e interfaz heredada |
 
 **No se reporta como defecto la combinación de descuentos:** B=1 es impar y R6 dispone aplicar descuento de cliente y cupón sucesivamente; un cliente solo coincide con una categoría, por lo que los `if` separados no acumulan frecuencia y VIP para una misma entrada. La aplicación consecutiva del cupón sí es el comportamiento requerido.
 
-Severidad expresa impacto; prioridad expresa urgencia. El snapshot exacto de legado está versionado en `v1.0.0`; contiene 37 líneas de código no vacías excluyendo comentarios. Densidad registrada: 8/37×100 = **21,6 defectos por 100 líneas**. Severidad: 3 altas, 4 medias y 1 baja. Prioridad: 5 altas, 2 medias y 1 baja.
+Severidad expresa impacto; prioridad expresa urgencia. La copia exacta del legado está versionada en `v1.0.0`; contiene 37 líneas de código no vacías, sin contar comentarios. Densidad registrada: 8/37×100 = **21,6 defectos por 100 líneas**. Severidad: 3 altas, 4 medias y 1 baja. Prioridad: 5 altas, 2 medias y 1 baja.
 
-**Métricas observadas:** regresión posterior: 32/32 = 100% pasa. Cobertura del módulo refactorizado: 100% sentencias y ramas (64 sentencias, 18 ramas). El código legado se conserva en la etiqueta v1.0.0; los defectos se reprodujeron por inspección y cálculo del código impreso, no se presentan como ejecución de una suite histórica.
+**Métricas observadas:** regresión posterior: 32/32 = 100% aprobadas. Cobertura del módulo refactorizado: 100% de sentencias y ramas (64 sentencias, 18 ramas). El código legado se conserva en la etiqueta v1.0.0 y en `envios_legado_v1.py`; las pruebas de contrato reproducen sus ocho defectos reportados.
 
 ---
 
 ## 6. Refactorización y regresión
 
-**Code smells del extracto (página 3):** función larga/múltiples responsabilidades (valida, calcula, imprime); números mágicos `50, 6000, 9000, 800, 5000, 100, 0.05, 0.10`; `flag` parámetro booleano que altera efectos; cadena de `if` de zonas con validación ausente; lógica duplicada de descuentos; condicionales anidados para cupón; nombres crípticos (`p,z,c,d,t`); literals/cadenas de dominio dispersos; comentario “fin de semana” no coincide con condición que omite sábado; precisión flotante seguida de truncado. La deuda es mayor costo de cambio, riesgo de regresión y comportamiento difícil de inferir.
+**Malos olores de código del extracto (página 3):** función larga con varias responsabilidades (valida, calcula, imprime); números mágicos `50, 6000, 9000, 800, 5000, 100, 0.05, 0.10`; parámetro booleano `flag` que altera efectos; cadena de `if` para zonas sin validación; lógica de descuentos repetida; condicionales anidados para cupón; nombres crípticos (`p,z,c,d,t`); textos de dominio dispersos; comentario de fin de semana que no coincide con la condición que omite el sábado; precisión flotante seguida de truncamiento. Esto aumenta el costo de cambio y el riesgo de regresión.
 
 **Clasificación:** DEF-01–07 correctivo; quitar `flag` correctivo de interfaz; separar funciones y constantes preventivo; estrategia de zona perfectivo; regla empresarial adaptativo/evolutivo.
 
-**Estrategia aplicada:** `StandardZone` y `EnterpriseZone` comparten contrato `apply(amount, weight)`; mapas seleccionan la política. UML simplificado:
+**Estrategia aplicada:** `ZonaEstandar` y `ZonaEmpresarial` comparten el contrato `aplicar(importe, peso)`; los diccionarios seleccionan la política. Diagrama UML simplificado:
 
 ```mermaid
 classDiagram
-  class ZoneStrategy {<<interface>>; apply(amount, weight)}
-  class StandardZone {rate; apply(amount, weight)}
-  class EnterpriseZone {rate; apply(amount, weight)}
-  ZoneStrategy <|.. StandardZone
-  ZoneStrategy <|.. EnterpriseZone
-  calc --> ZoneStrategy : selecciona según cliente
+  class EstrategiaZona {<<interfaz>>; aplicar(importe, peso)}
+  class ZonaEstandar {tasa; aplicar(importe, peso)}
+  class ZonaEmpresarial {tasa; aplicar(importe, peso)}
+  EstrategiaZona <|.. ZonaEstandar
+  EstrategiaZona <|.. ZonaEmpresarial
+  calc --> EstrategiaZona : elige según cliente
 ```
 
 La implementación ejecutable completa está en `envios.py`. Fragmento central de la política:
 
 ```python
 @dataclass(frozen=True)
-class EnterpriseZone:
-    rate: float
+class ZonaEmpresarial:
+    tasa: float
 
-    def apply(self, amount: float, weight: float) -> float:
-        return amount if weight > L2 else amount * (1 + self.rate)
+    def aplicar(self, importe: float, peso: float) -> float:
+        return importe if peso > LIMITE_2 else importe * (1 + self.tasa)
 
 
-def calc(weight: float, zone: str, customer: str, day: int,
-         coupon: str | None = None) -> int:
-    validate(weight, zone, customer, day, coupon)
-    amount = base_tariff(weight)
-    strategies = ENTERPRISE_ZONES if customer == "empresarial" else ZONES
-    amount = strategies[zone].apply(amount, weight)
-    amount = apply_customer_discount(amount, customer)
-    if coupon == "ENVIO10":  # B=1 impar: se acumula después del descuento cliente
-        amount *= 1 - DESC_CUPON
-    if day in (6, 7):  # E=5 impar: recargo de fin de semana al final
-        amount += RECARGO_FINDE
-    return round_hundreds(max(amount, PISO))
+def calc(peso: float, zona: str, cliente: str, dia: int,
+         cupon: str | None = None) -> int:
+    validar(peso, zona, cliente, dia, cupon)
+    importe = calcular_tarifa_base(peso)
+    estrategias = ZONAS_EMPRESARIALES if cliente == "empresarial" else ZONAS
+    importe = estrategias[zona].aplicar(importe, peso)
+    importe = aplicar_descuento_cliente(importe, cliente)
+    if cupon == "ENVIO10":  # B=1 impar: primero cliente y luego cupón
+        importe *= 1 - DESCUENTO_CUPON
+    if dia in (6, 7):  # E=5 impar: recargo de fin de semana al final
+        importe += RECARGO_FIN_DE_SEMANA
+    return redondear_a_centenas(max(importe, PISO_COBRO))
 ```
 
-La implementación refactorizada y corregida está en `envios.py`: validadores separados, constantes nombradas, función sin `flag`, estrategia de zona, piso y redondeo half-up. Regresión: **32/32 pasan** en `test_envios.py`; pytest-cov da 100% de cobertura.
+La implementación refactorizada y corregida está en `envios.py`: validaciones y tarifas separadas, constantes con nombre, función sin `flag`, estrategia de zona, piso y redondeo de mitades hacia arriba. Regresión: **32/32 pruebas aprobadas** en `test_envios.py`; pytest-cov informa cobertura total del 100%.
 
 | Métrica | Antes (calc del PDF) | Después (módulo entregado) | Cómo se obtuvo |
 |---|---:|---:|---|
 | CC de `calc` | 13 | 4 | decisiones del cuerpo: original 12; nuevo 3 + 1 |
-| LOC físicas, incluyendo blancos | 40 | 100 | snapshot `v1.0.0` / `envios.py` |
+| Líneas físicas, incluyendo blancos | 40 | 100 | copia `v1.0.0` / `envios.py` |
 | Cobertura | no medida en v1 | 100% sentencias y ramas | pytest-cov; 64 stmts, 18 ramas |
 
-La CC local de `calc` baja porque se extrajeron validación, tarifa y descuentos; la CC del módulo completo no equivale a la de una sola función. LOC aumenta por tipos, estrategias, nombres y separación. La fila anterior es una comparación útil, pero su conteo legacy se estima desde el texto del PDF, no desde checkout fuente.
+La CC local de `calc` baja porque se separaron validación, tarifa y descuentos; la CC del módulo completo no equivale a la de una sola función. Las líneas aumentan por tipos, estrategias y separación de responsabilidades. El conteo inicial se hizo sobre la copia del código extraída del PDF.
 
 ---
 
-## 7. Git, versionado y CHANGELOG
+## 7. Git, control de versiones y registro de cambios
 
-Se creó un repositorio local porque el material recibido solo contenía el PDF. `v1.0.0` etiqueta el snapshot del legado; `fix/DEF-01` a `fix/DEF-08` contienen una corrección por rama y se integraron en `main`; también existen `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`. Los commits identifican al autor como **Codex Assistant**, no como el estudiante. No se alteraron fechas para aparentar commits repartidos durante el día. La salida de `git log --oneline --graph --all` está adjunta en `git-log.txt`, capturada justo antes del commit que la incorpora.
+Se creó un repositorio local porque el material recibido solo contenía el PDF. `v1.0.0` etiqueta la copia del legado; las ramas `fix/DEF-01` a `fix/DEF-08` contienen una corrección cada una y se integraron en `main`. También existen `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`. Los commits identifican al autor como **Asistente Codex**, no como el estudiante. No se cambiaron fechas para aparentar que los commits se repartieron durante el día. El historial está adjunto en `git-log.txt`.
 
-Quitar `flag` cambia la interfaz pública de forma incompatible: el release de mantenimiento corresponde a **2.0.0 (major)**. El cliente empresarial añade funcionalidad compatible a esa nueva API, por lo que se etiqueta **2.1.0 (minor)**. `v2.0.0` apunta al commit de eliminación de `flag`; `v2.1.0` apunta al release final con refactor, cambio empresarial y regresión.
+Quitar `flag` cambia la interfaz pública de forma incompatible: la versión de mantenimiento corresponde a **2.0.0 (cambio mayor)**. El cliente empresarial añade funcionalidad compatible a esa nueva interfaz, por lo que se etiqueta **2.1.0 (cambio menor)**. `v2.0.0` apunta al cambio que elimina `flag`; `v2.1.0` apunta a la versión final con refactorización, cambio empresarial y regresión.
 
-### CHANGELOG.md
+### Archivo CHANGELOG.md
 
 ```markdown
-# Changelog
-Formato Keep a Changelog; versiones según SemVer.
+# Registro de cambios
+Formato de registro de cambios; versionado semántico.
 
 ## [2.1.0] - 2026-11-11
-### Added
+### Agregado
 - Cliente empresarial con 12% de descuento.
 - Exención del recargo de zona empresarial cuando peso > 10 kg.
-### Fixed
+### Corregido
 - Validación personalizada de peso, zona, día, cliente y cupón.
 - Recargo de fin de semana para sábado y domingo en el orden definido por E.
-- Descuentos conforme a B, cupón desconocido conforme a F, piso y half-up.
-### Changed
-- Refactor por estrategias de zona, extracción de funciones y constantes.
-- API final: `calc(weight, zone, customer, day, coupon=None)`, sin salida de consola.
-### Tests
-- Suite de 32 pruebas; 32 pasan; pytest-cov reporta 100% combinado.
+- Descuentos conforme a B, cupón desconocido conforme a F, piso y redondeo de mitades hacia arriba.
+### Cambiado
+- Reorganización por estrategias de zona, extracción de funciones y constantes.
+- Interfaz final: `calc(peso, zona, cliente, dia, cupon=None)`, sin salida de consola.
+### Pruebas
+- Conjunto de 32 pruebas; las 32 pasan; pytest-cov informa 100% de cobertura.
 
 ## [2.0.0] - 2026-11-11
-### Fixed
+### Corregido
 - Corregidos los defectos personales de peso, validaciones, recargos, cupón y redondeo.
-### Changed
-- Eliminado el parámetro `flag`; cambio incompatible de interfaz (major).
+### Cambiado
+- Eliminado `flag`; cambio incompatible de interfaz principal.
 
 ## [1.0.0] - 2026-11-11
-### Added
-- Snapshot ejecutable de la función heredada y configuración personal del enunciado.
+### Agregado
+- Copia ejecutable de la función heredada y configuración personal del enunciado.
 ```
 
-**Notas de versión 2.1.0:** API pura `calc(weight, zone, customer, day, coupon=None)` sin salida a consola; validaciones y precios conforme a las reglas personales; nuevo tipo empresarial y exención estricta sobre L2. El snapshot inicial se conserva en la etiqueta `v1.0.0`.
+**Notas de la versión 2.1.0:** interfaz `calc(peso, zona, cliente, dia, cupon=None)` sin salida a consola; validaciones y precios según los parámetros personales; nuevo tipo empresarial y exención estricta sobre L2. La copia inicial se conserva en la etiqueta `v1.0.0`.
 
 ---
 
@@ -327,9 +327,9 @@ CAMBIO=(3+7) mod 3=1. **Impacto:** nuevo valor en catálogo de cliente; nueva re
 
 **Pruebas primero (contrato del cambio):** CP16 prueba `peso=11 > L2` sin recargo rural; CP17 prueba `peso=10` mantiene recargo; CP18 verifica interacción de rural + empresarial + cupón. Escribir estas expectativas antes de implementar la estrategia evita que la implementación defina sus propias expectativas.
 
-Implementación: `EnterpriseZone.apply` devuelve el importe sin recargo si `weight > 10`; en caso contrario aplica tasa. `calc` elige estrategia empresarial según cliente; el descuento empresarial de 12% se aplica después de zona y antes de cupón; fin de semana, si corresponde, se agrega al final. Los tres casos de cambio pasan dentro de la suite.
+Implementación: `ZonaEmpresarial.aplicar` devuelve el importe sin recargo si `peso > 10`; de lo contrario, aplica la tasa de zona. `calc` elige la estrategia empresarial según el cliente; aplica el descuento empresarial del 12% después de la zona y antes del cupón; el recargo de fin de semana se suma al final. Los tres casos del cambio pasan en el conjunto de pruebas.
 
-**Comparación de impacto:** CC del cuerpo `calc` antes del cambio/refactor 13, después 4; líneas físicas del módulo refactorizado 100 frente a 40 del snapshot heredado; cobertura posterior medida 100% sentencias y ramas. No se atribuye la cobertura posterior al código heredado.
+**Comparación de impacto:** CC del cuerpo `calc` antes del cambio/refactorización 13, después 4; líneas físicas del módulo refactorizado 100 frente a 40 de la copia heredada; cobertura posterior medida: 100% de sentencias y ramas. No se atribuye la cobertura posterior al código heredado.
 
 ---
 
@@ -343,6 +343,6 @@ def test_empate_de_50_redondea_hacia_arriba():
     assert calc(4, "rural", "normal", 1) == 10400
 ```
 
-**Secuencia oral y de trabajo:** minuto 0–3, explicar R4/R8 y calcular 9.000×1,15=10.350; minuto 3–6, ejecutar primero `test_legacy_v1.py` y observar TLEG-07 xfailed (el legacy trunca a $10.300); minuto 6–11, cambiar redondeo a half-up; minuto 11–15, correr `test_envios.py`; minuto 15–18, revisar diff y el orden del piso/redondeo; minuto 18–20, commit correctivo y tag según versión ya publicada. La rama DEF-06 registra este arreglo.
+**Secuencia oral y de trabajo:** minuto 0–3, explicar R4/R8 y calcular 9.000×1,15=10.350; minuto 3–6, ejecutar `test_legado_v1.py` y observar PLEG-07 como fallo esperado (el legado trunca a $10.300); minuto 6–11, cambiar al redondeo de mitades hacia arriba; minuto 11–15, ejecutar `test_envios.py`; minuto 15–18, revisar los cambios y el orden del piso y el redondeo; minuto 18–20, registrar la corrección y la etiqueta correspondiente. La rama DEF-06 contiene este arreglo.
 
-**Evidencia:** `envios_legacy_v1.py` es el snapshot ejecutable de v1.0.0; `test_legacy_v1.py` reproduce los defectos y `test_envios.py` demuestra la regresión verde. No se adjunta una captura gráfica del terminal; los comandos reproducibles están indicados en la Parte 5.
+**Evidencia:** `envios_legado_v1.py` es la copia ejecutable de v1.0.0; `test_legado_v1.py` reproduce los defectos y `test_envios.py` demuestra la regresión aprobada. No se adjunta una captura gráfica del terminal; los comandos reproducibles están en la Parte 5.

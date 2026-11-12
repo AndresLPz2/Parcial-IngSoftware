@@ -1,100 +1,104 @@
-"""Cálculo de envíos EnvíaYa. Política personalizada para el código 0182310057."""
+"""Cálculo de envíos EnvíaYa, personalizado para el código 0182310057."""
 from dataclasses import dataclass
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Protocol
 
-PMAX = 45.0
-L1 = 3.0
-L2 = 10.0
+PESO_MAXIMO = 45.0
+LIMITE_1 = 3.0
+LIMITE_2 = 10.0
 RECARGO_RURAL = 0.15
 RECARGO_NACIONAL = 0.45
-DESC_VIP = 0.10
-DESC_FRECUENTE = 0.05
-DESC_CUPON = 0.10
-DESC_EMPRESARIAL = 0.12
-RECARGO_FINDE = 2000.0
-PISO = 5000.0
+DESCUENTO_VIP = 0.10
+DESCUENTO_FRECUENTE = 0.05
+DESCUENTO_CUPON = 0.10
+DESCUENTO_EMPRESARIAL = 0.12
+RECARGO_FIN_DE_SEMANA = 2000.0
+PISO_COBRO = 5000.0
 TARIFA_TRAMO_1 = 6000.0
 TARIFA_TRAMO_2 = 9000.0
-TARIFA_KG_EXTRA = 800.0
+TARIFA_KILO_ADICIONAL = 800.0
 
 
-class ZoneStrategy(Protocol):
-    def apply(self, amount: float, weight: float) -> float: ...
-
-
-@dataclass(frozen=True)
-class StandardZone:
-    rate: float
-
-    def apply(self, amount: float, weight: float) -> float:
-        return amount * (1 + self.rate)
+class EstrategiaZona(Protocol):
+    def aplicar(self, importe: float, peso: float) -> float: ...
 
 
 @dataclass(frozen=True)
-class EnterpriseZone:
-    rate: float
+class ZonaEstandar:
+    tasa: float
 
-    def apply(self, amount: float, weight: float) -> float:
-        return amount if weight > L2 else amount * (1 + self.rate)
+    def aplicar(self, importe: float, peso: float) -> float:
+        return importe * (1 + self.tasa)
 
 
-ZONES = {
-    "urbana": StandardZone(0.0),
-    "rural": StandardZone(RECARGO_RURAL),
-    "nacional": StandardZone(RECARGO_NACIONAL),
+@dataclass(frozen=True)
+class ZonaEmpresarial:
+    tasa: float
+
+    def aplicar(self, importe: float, peso: float) -> float:
+        return importe if peso > LIMITE_2 else importe * (1 + self.tasa)
+
+
+ZONAS = {
+    "urbana": ZonaEstandar(0.0),
+    "rural": ZonaEstandar(RECARGO_RURAL),
+    "nacional": ZonaEstandar(RECARGO_NACIONAL),
 }
-ENTERPRISE_ZONES = {
-    "urbana": EnterpriseZone(0.0),
-    "rural": EnterpriseZone(RECARGO_RURAL),
-    "nacional": EnterpriseZone(RECARGO_NACIONAL),
+ZONAS_EMPRESARIALES = {
+    "urbana": ZonaEmpresarial(0.0),
+    "rural": ZonaEmpresarial(RECARGO_RURAL),
+    "nacional": ZonaEmpresarial(RECARGO_NACIONAL),
 }
 
 
-def validate(weight: float, zone: str, customer: str, day: int, coupon: str | None) -> None:
-    if not isinstance(weight, (int, float)) or isinstance(weight, bool) or not 0 < weight <= PMAX:
+def validar(peso: float, zona: str, cliente: str, dia: int, cupon: str | None) -> None:
+    if not isinstance(peso, (int, float)) or isinstance(peso, bool) or not 0 < peso <= PESO_MAXIMO:
         raise ValueError("peso inválido")
-    if zone not in ZONES:
+    if zona not in ZONAS:
         raise ValueError("zona inválida")
-    if customer not in {"normal", "frecuente", "vip", "empresarial"}:
+    if cliente not in {"normal", "frecuente", "vip", "empresarial"}:
         raise ValueError("cliente inválido")
-    if not isinstance(day, int) or isinstance(day, bool) or not 1 <= day <= 7:
+    if not isinstance(dia, int) or isinstance(dia, bool) or not 1 <= dia <= 7:
         raise ValueError("día inválido")
-    if coupon is not None and coupon != "ENVIO10":
+    if cupon is not None and cupon != "ENVIO10":
         raise ValueError("cupón inválido")
 
 
-def base_tariff(weight: float) -> float:
-    if weight <= L1:  # D=0, par: L1 incluido
+def calcular_tarifa_base(peso: float) -> float:
+    if peso <= LIMITE_1:  # D=0 es par: el límite 1 se incluye.
         return TARIFA_TRAMO_1
-    if weight <= L2:
+    if peso <= LIMITE_2:
         return TARIFA_TRAMO_2
-    return TARIFA_TRAMO_2 + (weight - L2) * TARIFA_KG_EXTRA
+    return TARIFA_TRAMO_2 + (peso - LIMITE_2) * TARIFA_KILO_ADICIONAL
 
 
-def apply_customer_discount(amount: float, customer: str) -> float:
-    rates = {"normal": 0.0, "frecuente": DESC_FRECUENTE, "vip": DESC_VIP, "empresarial": DESC_EMPRESARIAL}
-    return amount * (1 - rates[customer])
+def aplicar_descuento_cliente(importe: float, cliente: str) -> float:
+    tasas = {
+        "normal": 0.0,
+        "frecuente": DESCUENTO_FRECUENTE,
+        "vip": DESCUENTO_VIP,
+        "empresarial": DESCUENTO_EMPRESARIAL,
+    }
+    return importe * (1 - tasas[cliente])
 
 
-def round_hundreds(amount: float) -> int:
-    return int(Decimal(str(amount)).quantize(Decimal("1E2"), rounding=ROUND_HALF_UP))
+def redondear_a_centenas(importe: float) -> int:
+    return int(Decimal(str(importe)).quantize(Decimal("1E2"), rounding=ROUND_HALF_UP))
 
 
-def calc(weight: float, zone: str, customer: str, day: int, coupon: str | None = None) -> int:
-    """Devuelve el costo final; día 6/7 es fin de semana. Solicitud asignada: cambio 1."""
-    validate(weight, zone, customer, day, coupon)
-    amount = base_tariff(weight)
+def calc(peso: float, zona: str, cliente: str, dia: int, cupon: str | None = None) -> int:
+    """Calcula el costo final; sábado y domingo corresponden a los días 6 y 7."""
+    validar(peso, zona, cliente, dia, cupon)
+    importe = calcular_tarifa_base(peso)
 
-    strategies = ENTERPRISE_ZONES if customer == "empresarial" else ZONES
-    amount = strategies[zone].apply(amount, weight)
+    estrategias = ZONAS_EMPRESARIALES if cliente == "empresarial" else ZONAS
+    importe = estrategias[zona].aplicar(importe, peso)
+    importe = aplicar_descuento_cliente(importe, cliente)
 
-    # E=5, impar: el recargo de fin de semana se suma después de descuentos.
-    amount = apply_customer_discount(amount, customer)
-    if coupon == "ENVIO10":  # B=1, impar: descuentos acumulados, cliente y luego cupón.
-        amount *= 1 - DESC_CUPON
-    if day in (6, 7):
-        amount += RECARGO_FINDE
+    if cupon == "ENVIO10":  # B=1 es impar: se aplican ambos descuentos en orden.
+        importe *= 1 - DESCUENTO_CUPON
+    if dia in (6, 7):  # E=5 es impar: el recargo se suma después de los descuentos.
+        importe += RECARGO_FIN_DE_SEMANA
 
-    amount = max(amount, PISO)
-    return round_hundreds(amount)
+    importe = max(importe, PISO_COBRO)
+    return redondear_a_centenas(importe)
