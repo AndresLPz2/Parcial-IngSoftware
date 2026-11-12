@@ -17,6 +17,8 @@ def calc(p, z, c, d, cup=None, flag=False):
         raise ValueError("zona inválida")
     if not isinstance(d, int) or isinstance(d, bool) or not 1 <= d <= 7:
         raise ValueError("día inválido")
+    if cup is not None and cup != "ENVIO10":
+        raise ValueError("cupón inválido")
     if p <= CONFIG["L1"]:
         t = 6000
     elif p <= CONFIG["L2"]:
