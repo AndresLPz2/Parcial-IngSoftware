@@ -282,7 +282,7 @@ La CC local de `calc` baja porque se extrajeron validación, tarifa y descuentos
 
 ## 7. Git, versionado y CHANGELOG
 
-Se creó un repositorio local porque el material recibido solo contenía el PDF. `v1.0.0` etiqueta el snapshot del legado; `fix/DEF-01` a `fix/DEF-08` contienen una corrección por rama y se integraron en `main`; también existen `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`. Los commits identifican al autor como **Codex Assistant**, no como el estudiante. No se alteraron fechas para aparentar commits repartidos durante el día.
+Se creó un repositorio local porque el material recibido solo contenía el PDF. `v1.0.0` etiqueta el snapshot del legado; `fix/DEF-01` a `fix/DEF-08` contienen una corrección por rama y se integraron en `main`; también existen `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`. Los commits identifican al autor como **Codex Assistant**, no como el estudiante. No se alteraron fechas para aparentar commits repartidos durante el día. La salida de `git log --oneline --graph --all` está adjunta en `git-log.txt`, capturada justo antes del commit que la incorpora.
 
 Quitar `flag` cambia la interfaz pública de forma incompatible: el release de mantenimiento corresponde a **2.0.0 (major)**. El cliente empresarial añade funcionalidad compatible a esa nueva API, por lo que se etiqueta **2.1.0 (minor)**. `v2.0.0` apunta al commit de eliminación de `flag`; `v2.1.0` apunta al release final con refactor, cambio empresarial y regresión.
 

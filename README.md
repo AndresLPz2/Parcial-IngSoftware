@@ -2,6 +2,8 @@
 
 El informe está en `Informe_Parcial3.md`; implementación en `envios.py`; regresión en `test_envios.py`; reproducción de defectos heredados en `test_legacy_v1.py`.
 
+La salida de historial solicitada por el enunciado está en `git-log.txt`.
+
 Parámetros usados para el código 0182310057 según la regla de seis cifras del PDF: A–F=3,1,0,0,5,7. Cambio asignado: cliente empresarial. `envios_legacy_v1.py` es la copia ejecutable exacta etiquetada como v1.0.0.
 
 ## Ejecutar

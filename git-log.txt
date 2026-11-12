@@ -1,0 +1,50 @@
+* 4225732 test: label legacy defect probes for defense
+* 3386acd docs: complete personalized audit and release notes
+*   41bf154 merge: legacy audit tests
+|\  
+| * c7e56f1 test: capture legacy v1 defect reproductions
+* |   789ad37 merge: enterprise customer change
+|\ \  
+| * | 9830c47 feat: add enterprise pricing and zone exemption
+|/ /  
+* |   234a744 merge: refactor with zone strategy
+|\ \  
+| * | 7c7ebac refactor: extract validation tariff and zone strategy
+|/ /  
+* | 6dda331 merge: automated regression suite
+|\| 
+| * a5f710d test: add personalized black-box regression suite
+|/  
+*   3a2ad87 merge: DEF-08 pure calculation API
+|\  
+| * 5cbb7bf fix(DEF-08): remove flag output side effect
+|/  
+*   5f17064 merge: DEF-07 customer validation
+|\  
+| * c4870e5 fix(DEF-07): reject unsupported customer types
+|/  
+*   adf6e37 merge: DEF-06 half-up rounding
+|\  
+| * ebd7759 fix(DEF-06): round half up to hundreds
+|/  
+*   f117333 merge: DEF-05 coupon validation
+|\  
+| * 80654a8 fix(DEF-05): reject unknown coupons
+|/  
+*   244c93f merge: DEF-04 fee ordering
+|\  
+| * 925f897 fix(DEF-04): apply weekend fee after discounts
+|/  
+*   93b1e1a merge: DEF-03 weekend days
+|\  
+| * 7466a77 fix(DEF-03): include Saturday weekend surcharge
+|/  
+*   4f6f820 merge: DEF-02 input validation
+|\  
+| * f5918de fix(DEF-02): validate zone and day
+|/  
+*   a3b1876 merge: DEF-01 personal weight limit
+|\  
+| * e114596 fix(DEF-01): validate against personal PMAX
+|/  
+* d886836 chore: archive personalized legacy baseline
