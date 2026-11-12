@@ -1,50 +1,53 @@
-* 4225732 test: label legacy defect probes for defense
-* 3386acd docs: complete personalized audit and release notes
-*   41bf154 merge: legacy audit tests
+* 9d7f226 documentación: registrar historial Git en español
+* ca65f8b documentación: traducir entregables y código al español
+* 966cea3 documentación: adjuntar la salida del historial Git
+* d1a1f0f pruebas: identificar defectos del legado para sustentación
+* 8222fc4 documentación: completar auditoría y notas de versión
+*   adcd8d1 integrar: pruebas de auditoría del legado
 |\  
-| * c7e56f1 test: capture legacy v1 defect reproductions
-* |   789ad37 merge: enterprise customer change
+| * 15f6c58 pruebas: reproducir defectos de la versión inicial
+* |   1b53c4a integrar: cambio de cliente empresarial
 |\ \  
-| * | 9830c47 feat: add enterprise pricing and zone exemption
+| * | 94b64dc función: agregar tarifa empresarial y exención de zona
 |/ /  
-* |   234a744 merge: refactor with zone strategy
+* |   80c0f5f integrar: estrategia de zona refactorizada
 |\ \  
-| * | 7c7ebac refactor: extract validation tariff and zone strategy
+| * | c98f778 refactorizar: separar validación, tarifa y estrategia de zona
 |/ /  
-* | 6dda331 merge: automated regression suite
+* | 5cc206f integrar: conjunto de regresión automatizada
 |\| 
-| * a5f710d test: add personalized black-box regression suite
+| * d5315a3 pruebas: agregar regresión de caja negra personal
 |/  
-*   3a2ad87 merge: DEF-08 pure calculation API
+*   99715bb integrar: DEF-08 interfaz de cálculo sin salida
 |\  
-| * 5cbb7bf fix(DEF-08): remove flag output side effect
+| * 6581e0a corregir(DEF-08): eliminar impresión mediante flag
 |/  
-*   5f17064 merge: DEF-07 customer validation
+*   119c741 integrar: DEF-07 validar cliente
 |\  
-| * c4870e5 fix(DEF-07): reject unsupported customer types
+| * 5ad8ba4 corregir(DEF-07): rechazar tipos de cliente inválidos
 |/  
-*   adf6e37 merge: DEF-06 half-up rounding
+*   08b686f integrar: DEF-06 redondeo a centenas
 |\  
-| * ebd7759 fix(DEF-06): round half up to hundreds
+| * 3cf622c corregir(DEF-06): redondear mitades hacia arriba
 |/  
-*   f117333 merge: DEF-05 coupon validation
+*   b1d7e49 integrar: DEF-05 validar cupón
 |\  
-| * 80654a8 fix(DEF-05): reject unknown coupons
+| * ddb63a0 corregir(DEF-05): rechazar cupones desconocidos
 |/  
-*   244c93f merge: DEF-04 fee ordering
+*   8cbd94c integrar: DEF-04 orden del recargo
 |\  
-| * 925f897 fix(DEF-04): apply weekend fee after discounts
+| * 00f90f9 corregir(DEF-04): sumar recargo después de descuentos
 |/  
-*   93b1e1a merge: DEF-03 weekend days
+*   c6a2868 integrar: DEF-03 días de fin de semana
 |\  
-| * 7466a77 fix(DEF-03): include Saturday weekend surcharge
+| * ba287a9 corregir(DEF-03): incluir recargo del sábado
 |/  
-*   4f6f820 merge: DEF-02 input validation
+*   335f439 integrar: DEF-02 validar entradas
 |\  
-| * f5918de fix(DEF-02): validate zone and day
+| * 83d203a corregir(DEF-02): validar zona y día
 |/  
-*   a3b1876 merge: DEF-01 personal weight limit
+*   135ec0f integrar: DEF-01 límite personal de peso
 |\  
-| * e114596 fix(DEF-01): validate against personal PMAX
+| * aa2f2a4 corregir(DEF-01): validar el peso máximo personal
 |/  
-* d886836 chore: archive personalized legacy baseline
+* a3c3ce5 mantenimiento: guardar la línea base heredada personalizada
