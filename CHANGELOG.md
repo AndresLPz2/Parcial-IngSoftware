@@ -2,6 +2,10 @@
 
 Formato de registro de cambios; versiones según el esquema semántico.
 
+## [2.1.3] - 2026-11-11
+### Corregido
+- Se guardó el guion de capturas con finales de línea compatibles con el Símbolo del sistema de Windows.
+
 ## [2.1.2] - 2026-11-11
 ### Documentación
 - Se agregó una secuencia interactiva para mostrar en consola las pruebas heredadas, la corrección de redondeo, la regresión, la cobertura y las versiones de Git.
