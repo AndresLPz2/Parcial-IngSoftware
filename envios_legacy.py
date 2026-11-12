@@ -12,7 +12,7 @@ CONFIG = {
 }
 
 
-def calc(p, z, c, d, cup=None, flag=False):
+def calc(p, z, c, d, cup=None):
     if p <= 0 or p > CONFIG["PMAX"]:
         raise ValueError("peso invalido")
     if z not in {"urbana", "rural", "nacional"}:
@@ -46,7 +46,5 @@ def calc(p, z, c, d, cup=None, flag=False):
         t = t + CONFIG["RECARGO_FINDE"]
     if t < 5000:
         t = 5000
-    if flag:
-        print("costo:", t)
     return int(Decimal(str(t)).quantize(Decimal("1E2"), rounding=ROUND_HALF_UP))
 
