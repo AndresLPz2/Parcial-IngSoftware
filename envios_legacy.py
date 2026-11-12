@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_HALF_UP
+
 # Código heredado transcrito del enunciado. CONFIG personalizado: A-F=3,1,0,0,5,7.
 CONFIG = {
     "PMAX": 45,
@@ -44,4 +46,5 @@ def calc(p, z, c, d, cup=None, flag=False):
         t = 5000
     if flag:
         print("costo:", t)
-    return int(t / 100) * 100
+    return int(Decimal(str(t)).quantize(Decimal("1E2"), rounding=ROUND_HALF_UP))
+
