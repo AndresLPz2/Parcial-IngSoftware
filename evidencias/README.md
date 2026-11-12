@@ -1,6 +1,6 @@
 # Evidencias de ejecución de pruebas
 
-Las imágenes presentan en español los resultados reales obtenidos al ejecutar pytest. Se conserva cada identificador de prueba para mantener la trazabilidad. Los resúmenes de texto y las imágenes se generan automáticamente con `generar_capturas.py`.
+Las imágenes actuales son resúmenes gráficos en español de los resultados reales de pytest; no son fotografías de la ventana del terminal. El archivo `mostrar_resultados.cmd` presenta cinco evidencias en una consola visible y se detiene entre cada una para que se pueda tomar una captura directa: defectos del legado, prueba roja del redondeo heredado, prueba verde del redondeo corregido, regresión con cobertura y ramas/versiones/historial de Git.
 
 ## Código heredado
 
@@ -16,4 +16,4 @@ La regresión termina con código de salida 0: 32 pruebas aprobadas, 62 sentenci
 
 ## Reproducción
 
-Instalar `pytest`, `pytest-cov` y `Pillow`. Ejecutar `python evidencias/generar_capturas.py` desde la carpeta principal. El generador ejecuta ambas suites, comprueba los resultados y vuelve a crear los resúmenes y capturas.
+Para tomar capturas directas, abrir `mostrar_resultados.cmd` y fotografiar la consola en cada pausa. El archivo usa el entorno temporal preparado en este equipo. Para reproducirlo en otro equipo, instalar Python, `pytest` y `pytest-cov`, y ajustar la ruta del intérprete en el archivo si hace falta. `generar_capturas.py` vuelve a crear los resúmenes gráficos; requiere `Pillow`.

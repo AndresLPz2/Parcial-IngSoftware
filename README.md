@@ -14,6 +14,6 @@ python -m pytest --runxfail -q --tb=no test_legado_v1.py
 python -m pytest -q --cov=envios --cov-branch --cov-report=term-missing test_envios.py
 ```
 
-Última ejecución: auditoría del legado, 9 fallos reproducibles; regresión, 32 pruebas aprobadas; 62 sentencias, 18 ramas y cobertura del 100%. Las capturas y sus instrucciones están en `evidencias/README.md`.
+Última ejecución: auditoría del legado, 9 fallos reproducibles; regresión, 32 pruebas aprobadas; 62 sentencias, 18 ramas y cobertura del 100%. Las evidencias están en `evidencias/README.md`; `mostrar_resultados.cmd` presenta cinco verificaciones en una consola visible y se pausa para tomar capturas.
 
-Etiquetas locales: v1.0.0 (legado), v2.0.0 (correcciones y retirada incompatible de `flag`), v2.1.0 (refactorización y cliente empresarial) y v2.1.1 (evidencias y métricas actualizadas). Se conservan las ramas requeridas por el enunciado: `fix/DEF-01` a `fix/DEF-08`, `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`.
+Etiquetas locales: v1.0.0 (legado), v2.0.0 (correcciones y retirada incompatible de `flag`), v2.1.0 (refactorización y cliente empresarial), v2.1.1 (evidencias y métricas actualizadas) y v2.1.2 (secuencia para capturas directas). Se conservan las ramas requeridas por el enunciado: `fix/DEF-01` a `fix/DEF-08`, `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`.

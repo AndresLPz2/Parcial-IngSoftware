@@ -2,6 +2,11 @@
 
 Formato de registro de cambios; versiones según el esquema semántico.
 
+## [2.1.2] - 2026-11-11
+### Documentación
+- Se agregó una secuencia interactiva para mostrar en consola las pruebas heredadas, la corrección de redondeo, la regresión, la cobertura y las versiones de Git.
+- Se aclaró que las imágenes existentes son resúmenes gráficos y se describió cómo obtener capturas directas.
+
 ## [2.1.1] - 2026-11-11
 ### Documentación
 - Se agregaron capturas y resúmenes en español de las pruebas fallidas del legado y la regresión aprobada.
