@@ -1,5 +1,6 @@
 # Código heredado transcrito del enunciado. CONFIG personalizado: A-F=3,1,0,0,5,7.
 CONFIG = {
+    "PMAX": 45,
     "L1": 3,
     "L2": 10,
     "RECARGO_RURAL": 0.15,
@@ -10,7 +11,7 @@ CONFIG = {
 
 
 def calc(p, z, c, d, cup=None, flag=False):
-    if p <= 0 or p > 50:
+    if p <= 0 or p > CONFIG["PMAX"]:
         raise ValueError("peso invalido")
     if p <= CONFIG["L1"]:
         t = 6000
