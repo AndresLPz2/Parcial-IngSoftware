@@ -2,6 +2,12 @@
 
 Formato de registro de cambios; versiones según el esquema semántico.
 
+## [2.1.4] - 2026-11-11
+### Documentación
+- Se incorporaron capturas directas del terminal para la auditoría del legado, el defecto de redondeo y la regresión corregida.
+### Corregido
+- La evidencia de ramas e historial usa los registros del proyecto cuando Git no está disponible en la consola.
+
 ## [2.1.3] - 2026-11-11
 ### Corregido
 - Se guardó el guion de capturas con finales de línea compatibles con el Símbolo del sistema de Windows.

@@ -51,14 +51,12 @@ pause
 echo ============================================================
 echo EVIDENCIA 5 DE 5 - RAMAS, VERSIONES E HISTORIAL DE GIT
 echo ============================================================
-echo --- Repositorio remoto ---
-git remote -v
-echo --- Ramas ---
-git branch --list
-echo --- Versiones ---
-git tag --list
-echo --- Historial reciente ---
-git log -8 --oneline --decorate --graph
+echo --- Historial de Git registrado ---
+type git-log.txt
+echo --- Versiones semanticas ---
+findstr /B "## [" CHANGELOG.md
+echo --- Ramas de trabajo documentadas ---
+findstr /C:"Se conservan las ramas requeridas" README.md
 echo.
 echo Toma la última captura; la demostración terminó.
 pause
