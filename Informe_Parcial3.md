@@ -75,7 +75,7 @@
 
 **Alcance:** función de cotización, validaciones, cálculo monetario, política personal, estrategia de zona y cambio empresarial. Fuera de alcance: persistencia, interfaz, impuestos, concurrencia y disponibilidad de servicios externos (no forman parte del material recibido).
 
-**Niveles:** unidad prueba validación, tramos, descuentos, zona, piso y redondeo por separado; integración verifica composición de estrategias + reglas de descuento/fin de semana; sistema ejecuta la API `calc` con combinaciones completas; aceptación recorre HU1–HU3 y confirma criterios con el propietario del producto/docente.
+**Niveles:** unidad prueba validación, tramos, descuentos, zona, piso y redondeo por separado; integración verifica composición de estrategias y reglas de descuento y fin de semana; sistema ejecuta la interfaz `calc` con combinaciones completas; aceptación recorre HU1–HU3 y confirma criterios con el responsable del producto o docente.
 
 **Estrategia/ambiente/roles:** diseño de caja negra (equivalencia, límites, tabla de decisión), caja blanca (sentencias, ramas y caminos del código original), regresión automatizada con pytest, pruebas deterministas sin red ni reloj. Python 3.12, pytest/pytest-cov, Windows; tarifa en pesos enteros al final. QA diseña/ejecuta, mantenimiento corrige, responsable de negocio valida la interpretación del R9.
 
@@ -282,7 +282,7 @@ La CC local de `calc` baja porque se separaron validación, tarifa y descuentos;
 
 ## 7. Git, control de versiones y registro de cambios
 
-Se creó un repositorio local porque el material recibido solo contenía el PDF. `v1.0.0` etiqueta la copia del legado; las ramas `fix/DEF-01` a `fix/DEF-08` contienen una corrección cada una y se integraron en `main`. También existen `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`. Los commits identifican al autor como **Asistente Codex**, no como el estudiante. No se cambiaron fechas para aparentar que los commits se repartieron durante el día. El historial está adjunto en `git-log.txt`.
+Se creó un repositorio local porque el material recibido solo contenía el PDF. `v1.0.0` etiqueta la copia del legado; las ramas `fix/DEF-01` a `fix/DEF-08` contienen una corrección cada una y se integraron en `main`. También existen `test/suite`, `refactor/estrategia` y `feat/cliente-empresarial`. Los registros identifican al autor como **Asistente Codex**, no como el estudiante. No se cambiaron fechas para aparentar actividad repartida durante el día. El historial adjunto en `git-log.txt` se obtuvo con `git log --oneline --graph --exclude=refs/original/* --all`; la exclusión omite las referencias internas de respaldo que Git conserva y que no se publican.
 
 Quitar `flag` cambia la interfaz pública de forma incompatible: la versión de mantenimiento corresponde a **2.0.0 (cambio mayor)**. El cliente empresarial añade funcionalidad compatible a esa nueva interfaz, por lo que se etiqueta **2.1.0 (cambio menor)**. `v2.0.0` apunta al cambio que elimina `flag`; `v2.1.0` apunta a la versión final con refactorización, cambio empresarial y regresión.
 
