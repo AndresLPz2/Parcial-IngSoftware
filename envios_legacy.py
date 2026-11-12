@@ -17,6 +17,8 @@ def calc(p, z, c, d, cup=None, flag=False):
         raise ValueError("peso invalido")
     if z not in {"urbana", "rural", "nacional"}:
         raise ValueError("zona inválida")
+    if c not in {"normal", "frecuente", "vip"}:
+        raise ValueError("cliente inválido")
     if not isinstance(d, int) or isinstance(d, bool) or not 1 <= d <= 7:
         raise ValueError("día inválido")
     if cup is not None and cup != "ENVIO10":
